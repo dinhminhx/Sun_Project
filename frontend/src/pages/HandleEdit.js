@@ -79,7 +79,7 @@ class HandleEdit extends Component
                 }
         });
         
-        const res =  await axios.put(`http://localhost:8000/api/EditDone/${res_id}`,formData);
+        const res =  await axios.post(`http://localhost:8000/api/EditDone/${res_id}?_method=PUT`,formData);
         if(res.data.status === 200)
         {
             swal({

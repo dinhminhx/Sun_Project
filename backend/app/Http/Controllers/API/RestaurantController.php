@@ -76,24 +76,24 @@ class RestaurantController extends Controller
     }
     public function update(Request $request,$id)
     {
-        // $validator = Validator::make(
-        //     $request->all(),
-        //     [
-        //         'name' => 'required|max:255',
-        //         'phone' => 'required|numeric|max:9999999999|min:0000000000',
-        //         'email' => 'required|max:255',
-        //         'detail' => 'required',
-        //         'image' => 'required',
-        //     ]
-        // );
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => 'required|max:255',
+                'phone' => 'required|numeric|max:9999999999|min:0000000000',
+                'email' => 'required|max:255',
+                'detail' => 'required',
+                'image' => 'required',
+            ]
+        );
 
-        // if($validator->fails()) {
-        //     return response()->json([
-        //         'validate_err'=> $validator->messages(),
-        //     ]);
-        // }
-        // else
-        // {
+        if($validator->fails()) {
+            return response()->json([
+                'validate_err'=> $validator->messages(),
+            ]);
+        }
+        else
+        {
                 $restaurant = Restaurant::find($id);
                 if($restaurant)
                 {
@@ -116,7 +116,7 @@ class RestaurantController extends Controller
                         'message' => 'Restaurant ID Not Found',
                     ]);
                 }
-        // }
+        }
     }
 
     public function destroy($id){
