@@ -3,20 +3,34 @@ import {Link} from 'react-router-dom';
 import TextareaAutosize from 'react-textarea-autosize';
 import axios from 'axios';
 import swal from 'sweetalert';
+
 class HandleEdit extends Component
 {
     state ={
-        name: '',
-        phone: '',
-        email: '',
-        detail: '',
-        image: '',
+        formData: {
+            name: '',
+            phone: '',
+            email: '',
+            detail: '',
+            image: '',
+        },
         error_list:[],
     }
 
     handleInput = (e)=> {
         this.setState({
-            [e.target.name] : e.target.value
+           formData: {
+                ...this.state.formData,
+                [e.target.name] : e.target.value
+           }
+        });
+    }
+    handleImage = (e)=> {
+        this.setState({
+            formData: {
+                ...this.state.formData,
+                image : e.target.files[0]
+           }
         });
     }
 
@@ -25,15 +39,13 @@ class HandleEdit extends Component
         const res = await axios.get(`http://localhost:8000/api/Edit/${res_id}`);
         if(res.data.status === 200)
         {
-                
                 this.setState({
-                    name: res.data.restaurant.name,
-                    phone:  res.data.restaurant.phone,
-                    email: res.data.restaurant.email,
-                    detail: res.data.restaurant.detail,
-                    image: res.data.restaurant.image,
-                });
+                    formData: {
+                        ...res.data.restaurant
+                    }
+                })
         }
+
         else if(res.data.status === 404)
         {
             swal({
@@ -43,6 +55,7 @@ class HandleEdit extends Component
                 button: "Back!",
               });
         }
+        
     }
 
     updateRestaurantData = async (e)=> {
@@ -50,9 +63,25 @@ class HandleEdit extends Component
         document.getElementById('updatebtn').disabled = true;
         document.getElementById('updatebtn').innerText="Updating";
         const res_id = this.props.id;
-        const res =  await axios.put(`http://localhost:8000/api/EditDone/${res_id}`,this.state);
+        const formData = new FormData(); 
+        formData.append( 
+            "image", 
+            this.state.formData.image, 
+            this.state.formData.image.name,
+        ); 
+        Object.keys(this.state.formData).forEach(key=> {
+            if(key!=="image")
+                {
+                    formData.append( 
+                        key, 
+                        this.state.formData[key],
+                    ); 
+                }
+        });
+        
+        const res =  await axios.put(`http://localhost:8000/api/EditDone/${res_id}`,formData);
         if(res.data.status === 200)
-         {
+        {
             swal({
                 title: res.data.message,
                 text: "Restaurant was successfully updated ",
@@ -61,8 +90,8 @@ class HandleEdit extends Component
               });
              document.getElementById('updatebtn').disabled = false;
              document.getElementById('updatebtn').innerText="Updated";
-         }
-         else if(res.data.status === 404)
+        }
+        else if(res.data.status === 404)
         {
             swal({
                 title: res.data.message,
@@ -94,28 +123,28 @@ class HandleEdit extends Component
                             <form onSubmit = {this.updateRestaurantData}>
                                     <div className="form-group mb-3">
                                         <label>Restaurant Name</label>
-                                        <input type="text" onChange={this.handleInput}  name ="name" value={this.state.name} className="form-control" placeholder="Restaurant Name"/>
+                                        <input type="text" onChange={this.handleInput}  name ="name" value={this.state.formData.name} className="form-control" placeholder="Restaurant Name"/>
                                         <span className="text-danger">{this.state.error_list.name}</span>
                                     </div>
                                     <div className="form-group mb-3">
                                         <label>Restaurant Phone</label>
-                                        <input type="text" onChange={this.handleInput} name ="phone" value={this.state.phone} className="form-control" placeholder="Phone"/>
+                                        <input type="text" onChange={this.handleInput} name ="phone" value={this.state.formData.phone} className="form-control" placeholder="Phone"/>
                                         <span className="text-danger">{this.state.error_list.phone}</span>
                                     </div>
                                     <div className="form-group mb-3">
                                         <label>Restaurant Email</label>
-                                        <input type="text" onChange={this.handleInput} name ="email" value={this.state.email}  className="form-control" placeholder="Email"/>
+                                        <input type="text" onChange={this.handleInput} name ="email" value={this.state.formData.email}  className="form-control" placeholder="Email"/>
                                         <span className="text-danger">{this.state.error_list.email}</span>
                                     </div>
                                     <div className="form-group mb-3">
                                         <label>Restaurant Details</label>
-                                        <TextareaAutosize type="text" onChange={this.handleInput} name ="detail" value={this.state.detail}  className="form-control" placeholder="Detail" />
+                                        <TextareaAutosize type="text" onChange={this.handleInput} name ="detail" value={this.state.formData.detail}  className="form-control" placeholder="Detail" />
                                         <span className="text-danger">{this.state.error_list.detail}</span>
                                     </div>
                                     
                                     <div className="form-group mb-3">
                                         <label>Restaurant Image</label>
-                                        <input type="file" onChange={this.handleInput} name ="image" value=""  className="form-control" placeholder="Image"/>
+                                        <input type="file" onChange={this.handleImage} name ="image" value={this.state.formData.image.value} className="form-control" placeholder="Image"/>
                                         <span className="text-danger">{this.state.error_list.image}</span>
                                     </div>
                                     <div className="form-group mb-3">

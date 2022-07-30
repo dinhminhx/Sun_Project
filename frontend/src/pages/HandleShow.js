@@ -4,11 +4,13 @@ import axios from 'axios';
 class HandleShow extends Component
 {
     state ={
-        name: '',
-        phone: '',
-        email: '',
-        detail: '',
-        image: '',
+        formData: {
+            name: '',
+            phone: '',
+            email: '',
+            detail: '',
+            image: '',
+        },
         error_list:[],
     }
     async componentDidMount() {
@@ -16,15 +18,13 @@ class HandleShow extends Component
         const res = await axios.get(`http://localhost:8000/api/Show/${res_id}`);
         if(res.data.status === 200)
         {
-                
                 this.setState({
-                    name: res.data.restaurant.name,
-                    phone:  res.data.restaurant.phone,
-                    email: res.data.restaurant.email,
-                    detail: res.data.restaurant.detail,
-                    image: res.data.restaurant.image,
-                });
-        }
+                    formData: {
+                        ...res.data.restaurant
+                    }
+                })
+                }
+        
     }
     render() {
         return (
@@ -39,15 +39,15 @@ class HandleShow extends Component
                             </div>
                             <div className="card-body">
                             <div>
-                                <h3>Name : {this.state.name} </h3>
-                                <h4>Contact: {this.state.phone} </h4>
-                                <h4>Email : {this.state.email} </h4>
-                                 <b>Describe: </b>  {this.state.detail}
+                                <h3>Name : {this.state.formData.name} </h3>
+                                <h4>Contact: {this.state.formData.phone} </h4>
+                                <h4>Email : {this.state.formData.email} </h4>
+                                 <b>Describe: </b>  {this.state.formData.detail}
                             </div>
                             </div>
                         </div>
                     </div>
-                    <img src={process.env.PUBLIC_URL+"/image/"+this.state.image.slice(12)} alt="" style={{maxWidth: "50%", height: "50%" ,float: "right"}}></img>
+                    <img src={"http://localhost:8000/"+this.state.formData.image} alt="" style={{maxWidth: "50%", height: "50%" ,float: "right"}}></img>
                 </div>
             </div>
         );

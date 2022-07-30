@@ -42,7 +42,9 @@ class RestaurantController extends Controller
                 $restaurant->phone = $request->input('phone');
                 $restaurant->email = $request->input('email');
                 $restaurant->detail = $request->input('detail');
-                $restaurant->image = $request->input('image');
+                $image = $request->file('image');
+                $storedPath = $image->move('images', $image->getClientOriginalName());
+                $restaurant->image = $storedPath;
                 $restaurant->save();
                 return response()->json([
                     'status' => 200,
@@ -74,24 +76,24 @@ class RestaurantController extends Controller
     }
     public function update(Request $request,$id)
     {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'name' => 'required|max:255',
-                'phone' => 'required|numeric|max:9999999999|min:0000000000',
-                'email' => 'required|max:255',
-                'detail' => 'required',
-                'image' => 'required',
-            ]
-        );
+        // $validator = Validator::make(
+        //     $request->all(),
+        //     [
+        //         'name' => 'required|max:255',
+        //         'phone' => 'required|numeric|max:9999999999|min:0000000000',
+        //         'email' => 'required|max:255',
+        //         'detail' => 'required',
+        //         'image' => 'required',
+        //     ]
+        // );
 
-        if($validator->fails()) {
-            return response()->json([
-                'validate_err'=> $validator->messages(),
-            ]);
-        }
-        else
-        {
+        // if($validator->fails()) {
+        //     return response()->json([
+        //         'validate_err'=> $validator->messages(),
+        //     ]);
+        // }
+        // else
+        // {
                 $restaurant = Restaurant::find($id);
                 if($restaurant)
                 {
@@ -99,7 +101,9 @@ class RestaurantController extends Controller
                     $restaurant->phone = $request->input('phone');
                     $restaurant->email = $request->input('email');
                     $restaurant->detail = $request ->input('detail');
-                    $restaurant->image = $request ->input('image');
+                    $image = $request->file('image');
+                    $storedPath = $image->move('images', $image->getClientOriginalName());
+                    $restaurant->image = $storedPath;
                     $restaurant->update();
                     return response()->json([
                         'status' => 200,
@@ -112,9 +116,9 @@ class RestaurantController extends Controller
                         'message' => 'Restaurant ID Not Found',
                     ]);
                 }
-        }
-        
+        // }
     }
+
     public function destroy($id){
         $restaurant = Restaurant::find($id);
         $restaurant->delete();
