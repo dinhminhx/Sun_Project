@@ -53,7 +53,7 @@ class Restaurant extends Component
                             <td>{item.phone}</td>
                             <td>{item.email}</td>
                             <td className ="M2 ">{item.detail}</td>
-                            <img src={"http://localhost:8000/"+item.image} alt="" style={{maxWidth: "100%", height: "100%"}}></img>
+                            <td><img src={"http://localhost:8000/"+item.image} alt="" style={{maxWidth: "100%", height: "100%"}}></img></td>
                             <td>
                                 <Link to={`Edit/${item.id}`} className="btn btn-success btn-sm">Edit</Link>
                             </td>
