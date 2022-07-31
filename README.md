@@ -17,7 +17,7 @@ Demo:
 
 ### Công nghệ và kĩ thuật được sử dụng trong sản phẩm
 
-**Công nghệ : ** 
+**Công nghệ :** 
 
 * **ReactJS**		
   - ReactDOM 
