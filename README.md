@@ -13,7 +13,7 @@ Sản phẩm này giúp cho người chủ cửa hàng có thể thêm vào nh�
 3. Hiển thị thông tin chi tiết nhà hàng
 4. Xóa nhà hàng
 
-Demo:  
+Demo:  https://sun-project-ming.herokuapp.com/
 
 ### Công nghệ và kĩ thuật được sử dụng trong sản phẩm
 
