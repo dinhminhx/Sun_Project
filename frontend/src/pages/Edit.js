@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 function Edit(){
     const {id} = useParams();
-    
-    return(<HandleEdit id={id}></HandleEdit>);
+    const navigate = useNavigate();
+    return(<HandleEdit id={id} navigate = {navigate}></HandleEdit>);
 }
 export default Edit;

@@ -1,10 +1,11 @@
 import React,{Component} from 'react';
+import {useState} from 'react';
 import {Link} from 'react-router-dom';
 import TextareaAutosize from 'react-textarea-autosize';
 import axios from 'axios';
 import swal from 'sweetalert';
 
-class HandleEdit extends Component
+class HandleAdd extends Component
 {
     state ={
         formData: {
@@ -34,41 +35,15 @@ class HandleEdit extends Component
         });
     }
 
-    async componentDidMount() {
-        const res_id = this.props.id;
-        const res = await axios.get(`http://localhost:8000/api/Edit/${res_id}`);
-        if(res.data.status === 200)
-        {
-                this.setState({
-                    formData: {
-                        ...res.data.restaurant
-                    }
-                })
-        }
-
-        else if(res.data.status === 404)
-        {
-            swal({
-                title: res.data.message,
-                text: "Please Try Again",
-                icon: "warning",
-                button: "Back!",
-              });
-        }
-        
-    }
-
-    updateRestaurantData = async (e)=> {
+    saveRestaurantData = async (e)=> {
         e.preventDefault();
-        document.getElementById('updatebtn').disabled = true;
-        document.getElementById('updatebtn').innerText="Updating";
-        const res_id = this.props.id;
         const formData = new FormData(); 
         formData.append( 
             "image", 
             this.state.formData.image, 
-            this.state.formData.image.name,
+            this.state.formData.image.name 
         ); 
+        
         Object.keys(this.state.formData).forEach(key=> {
             if(key!=="image")
                 {
@@ -78,37 +53,31 @@ class HandleEdit extends Component
                     ); 
                 }
         });
-        
-        const res =  await axios.post(`http://localhost:8000/api/EditDone/${res_id}?_method=PUT`,formData);
+        const res =  await axios.post('http://localhost:8000/api/Add',formData);
         if(res.data.status === 200)
         {
             swal({
-                title: res.data.message,
-                text: "Restaurant was successfully updated ",
+                title: "Success",
+                text: "Restaurant was successfully added ",
                 icon: "success",
                 button: "Back!",
               });
-             document.getElementById('updatebtn').disabled = false;
-             document.getElementById('updatebtn').innerText="Updated";
-             this.props.navigate('/');
+            this.setState({
+                name: '',
+                phone: '',
+                email: '',
+                detail: '',
+                image: '',
+            });
+            this.props.navigate('/');
         }
-        else if(res.data.status === 404)
-        {
-            swal({
-                title: res.data.message,
-                text: "Please Try Again",
-                icon: "warning",
-                button: "Back!",
-              });
-        }
-        else
-        {
+        else {
             this.setState({
                 error_list: res.data.validate_err,
-            })
+            });
         }
+    
     }
-
     render() {
         return (
             <div className="container">
@@ -116,12 +85,12 @@ class HandleEdit extends Component
                     <div className="col-md-12">
                         <div className="card">
                             <div className="card-header">
-                                <h4>Edit Data
+                                <h4>Add Data
                                 <Link to={'/'} className="btn btn-primary btn-sm float-end">Back</Link>
                                 </h4>
                             </div>
                             <div className="card-body">
-                            <form onSubmit = {this.updateRestaurantData}>
+                            <form onSubmit = {this.saveRestaurantData}>
                                     <div className="form-group mb-3">
                                         <label>Restaurant Name</label>
                                         <input type="text" onChange={this.handleInput}  name ="name" value={this.state.formData.name} className="form-control" placeholder="Restaurant Name"/>
@@ -142,14 +111,13 @@ class HandleEdit extends Component
                                         <TextareaAutosize type="text" onChange={this.handleInput} name ="detail" value={this.state.formData.detail}  className="form-control" placeholder="Detail" />
                                         <span className="text-danger">{this.state.error_list.detail}</span>
                                     </div>
-                                    
                                     <div className="form-group mb-3">
                                         <label>Restaurant Image</label>
-                                        <input type="file" onChange={this.handleImage} name ="image" value={this.state.formData.image.value} className="form-control" placeholder="Image"/>
+                                        <input type="file" onChange={this.handleImage} name ="image" value={this.state.formData.image.value}  className="form-control"/>
                                         <span className="text-danger">{this.state.error_list.image}</span>
                                     </div>
                                     <div className="form-group mb-3">
-                                        <button type="sumbit" id ="updatebtn" className="btn btn-primary">Submit</button>
+                                        <button type="sumbit" className="btn btn-primary">Submit</button>
                                     </div>
                                 </form>
                             </div>
@@ -160,4 +128,5 @@ class HandleEdit extends Component
         );
     }
 }
-export default HandleEdit;
+
+export default HandleAdd;
