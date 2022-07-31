@@ -14,7 +14,7 @@ Sản phẩm này giúp cho người chủ cửa hàng có thể thêm vào nh�
 4. Xóa nhà hàng
 
 Demo:  https://sun-project-ming.herokuapp.com/
-
+Video Demo : https://drive.google.com/drive/folders/10btGTTuGAgmNMCQ2RpMEg7ZUtoOBFUDG?usp=sharing
 ### Công nghệ và kĩ thuật được sử dụng trong sản phẩm
 
 **Công nghệ :** 
