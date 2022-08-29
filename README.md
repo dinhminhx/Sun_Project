@@ -1,4 +1,5 @@
-## Website CRUD fullstack với Laravel và ReactJS
+## Website CRUD fullstack với Laravel và ReactJS | 
+## This is the project used to assess the entrance of the Sun company summer internship
 
 ## Tên sản phẩm : Website quản lý thông tin nhà hàng
 
